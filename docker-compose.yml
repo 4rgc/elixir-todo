@@ -1,0 +1,33 @@
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: todo_app_prod
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 2s
+      timeout: 2s
+      retries: 5
+
+  web:
+    build: .
+    environment:
+      DATABASE_URL: ecto://postgres:postgres@db/todo_app_prod
+      SECRET_KEY_BASE: ${SECRET_KEY_BASE}
+      PHX_SERVER: true
+      MIX_ENV: prod
+    ports:
+      - "4000:4000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  db_data:
