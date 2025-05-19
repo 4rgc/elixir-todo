@@ -4,7 +4,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: todo_app_prod
+      POSTGRES_DB: todo_app_dev
     ports:
       - "5432:5432"
     volumes:
@@ -17,12 +17,17 @@ services:
       retries: 5
 
   web:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
     environment:
-      DATABASE_URL: ecto://postgres:postgres@db/todo_app_prod
+      DATABASE_URL: ecto://postgres:postgres@db/todo_app_dev
       SECRET_KEY_BASE: ${SECRET_KEY_BASE}
-      PHX_SERVER: true
-      MIX_ENV: prod
+      MIX_ENV: dev
+    volumes:
+      - .:/app
+      - /app/_build
+      - /app/deps
     ports:
       - "4000:4000"
     depends_on:
