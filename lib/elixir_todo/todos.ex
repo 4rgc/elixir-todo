@@ -118,6 +118,20 @@ defmodule ElixirTodo.Todos do
   end
 
   @doc """
+  Returns the list of items for a specific List.
+
+  ## Examples
+
+      iex> list_items_for_list(list)
+      [%Item{}, ...]
+
+  """
+  def list_items_for_list(list) do
+    from(i in Item, where: i.list_id == ^list.id)
+    |> Repo.all()
+  end
+
+  @doc """
   Gets a single item.
 
   Raises `Ecto.NoResultsError` if the Item does not exist.

@@ -1,5 +1,4 @@
 defmodule ElixirTodoWeb.Router do
-  # alias ElixirTodoWeb.ListLive
   use ElixirTodoWeb, :router
 
   pipeline :browser do
@@ -18,8 +17,7 @@ defmodule ElixirTodoWeb.Router do
   scope "/", ElixirTodoWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
-    # live "/", ElixirTodoWeb.ItemLive, :index
+    live "/", TodoLive, :index
     live "/lists", ListLive.Index, :index
     live "/lists/new", ListLive.Index, :new
     live "/lists/:id/edit", ListLive.Index, :edit
