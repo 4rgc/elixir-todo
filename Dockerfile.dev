@@ -1,0 +1,23 @@
+# Use official Elixir image
+FROM elixir:1.18-alpine
+
+# Install dependencies
+RUN apk add --no-cache build-base npm git
+
+# Set workdir
+WORKDIR /app
+
+VOLUME /app/deps
+VOLUME /app/_build
+
+COPY mix.exs mix.exs
+COPY mix.lock mix.lock
+
+# Install Elixir deps
+RUN mix local.hex --force && \
+    mix local.rebar --force && \
+    mix deps.get
+
+EXPOSE 4000
+
+CMD ["mix", "phx.server"]

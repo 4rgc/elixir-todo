@@ -80,6 +80,31 @@ defmodule ElixirTodo.MixProject do
         "tailwind elixir_todo --minify",
         "esbuild elixir_todo --minify",
         "phx.digest"
+      ],
+      "docker.compose.build": [
+        "cmd docker compose build"
+      ],
+      "docker.compose.up": [
+        "cmd docker compose up -d"
+      ],
+      "docker.compose.down": [
+        "cmd docker compose down"
+      ],
+      "docker.compose.it": [
+        "cmd docker compose exec -it web sh"
+      ],
+      "dev.build": [
+        "assets.deploy",
+        "docker.compose.build"
+      ],
+      "dev.up": [
+        "docker.compose.up"
+      ],
+      "dev.down": [
+        "docker.compose.down"
+      ],
+      "dev.logs.server": [
+        "cmd docker compose logs -f web"
       ]
     ]
   end
