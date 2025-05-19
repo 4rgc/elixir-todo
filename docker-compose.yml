@@ -20,7 +20,7 @@ services:
     build: .
     environment:
       DATABASE_URL: ecto://postgres:postgres@db/todo_app_prod
-      SECRET_KEY_BASE: XHjD4qyUioNuHcA2gFQA96+U+BQywZLBKv9SDkXUoZlzo4u7e8FHLtQyFIwzJLyU
+      SECRET_KEY_BASE: ${SECRET_KEY_BASE}
       PHX_SERVER: true
       MIX_ENV: prod
     ports:
