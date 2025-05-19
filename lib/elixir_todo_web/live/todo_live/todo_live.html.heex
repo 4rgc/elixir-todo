@@ -1,0 +1,35 @@
+<div class="flex gap-4">
+  <aside>
+    <h2 class="font-bold mb-2">Lists</h2>
+    <ul>
+      <%= for list <- @lists do %>
+        <li>
+          <button
+            phx-click="select_list"
+            phx-value-id={list.id}
+            style={"color: #{list.color}; font-weight: #{@selected_list && @selected_list.id == list.id && "bold"};"}
+          >
+            <%= list.name %>
+          </button>
+        </li>
+      <% end %>
+    </ul>
+  </aside>
+  <main class="flex-1">
+    <h1 class="text-2xl mb-4" style={"color: #{@selected_list && @selected_list.color};"}>
+      <%= @selected_list && @selected_list.name %>
+    </h1>
+    <ul>
+      <%= for item <- @items do %>
+        <li>
+          <label>
+            <input type="checkbox" phx-click="toggle_item" phx-value-id={item.id} checked={item.completed} />
+            <span style={item.completed && "text-decoration: line-through;"}>
+              <%= item.text %>
+            </span>
+          </label>
+        </li>
+      <% end %>
+    </ul>
+  </main>
+</div>
