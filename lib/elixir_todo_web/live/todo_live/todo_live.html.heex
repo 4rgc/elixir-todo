@@ -22,12 +22,27 @@
     <ul>
       <%= for item <- @items do %>
         <li>
-          <label>
-            <input type="checkbox" phx-click="toggle_item" phx-value-id={item.id} checked={item.completed} />
-            <span style={item.completed && "text-decoration: line-through;"}>
+          <input type="checkbox"
+                 phx-click="toggle_item"
+                 phx-value-id={item.id}
+                 checked={item.completed} />
+
+          <%= if @editing_item_id == item.id do %>
+            <input type="text"
+                   name="text"
+                   value={item.text}
+                   phx-blur="save_edit"
+                   phx-key="enter"
+                   phx-value-id={item.id}
+                   autofocus
+            />
+          <% else %>
+            <span style={item.completed && "text-decoration: line-through; cursor: pointer;"}
+                  phx-click="edit_item"
+                  phx-value-id={item.id}>
               <%= item.text %>
             </span>
-          </label>
+          <% end %>
         </li>
       <% end %>
     </ul>
