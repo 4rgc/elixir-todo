@@ -17,7 +17,8 @@ defmodule ElixirTodoWeb.TodoLive do
      socket
      |> assign(:lists, lists)
      |> assign(:selected_list, selected_list)
-     |> assign(:items, items)}
+     |> assign(:items, items)
+     |> assign(:editing_item_id, nil)}
   end
 
   @impl true
@@ -33,6 +34,20 @@ defmodule ElixirTodoWeb.TodoLive do
     {:ok, _} = Todos.update_item(item, %{completed: !item.completed})
     items = Todos.list_items_for_list(socket.assigns.selected_list)
     {:noreply, assign(socket, items: items)}
+  end
+
+  @impl true
+  def handle_event("edit_item", %{"id" => id}, socket) do
+    item = Enum.find(socket.assigns.items, &("#{&1.id}" == id))
+    {:noreply, assign(socket, editing_item_id: item.id)}
+  end
+
+  @impl true
+  def handle_event("save_edit", %{"id" => id, "value" => value}, socket) do
+    item = Todos.get_item!(id)
+    {:ok, _} = Todos.update_item(item, %{text: value})
+    items = Todos.list_items_for_list(socket.assigns.selected_list)
+    {:noreply, assign(socket, items: items, editing_item_id: nil)}
   end
 
   # Add more handle_event functions for creating lists/items as needed
