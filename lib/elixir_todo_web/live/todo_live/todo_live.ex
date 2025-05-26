@@ -43,11 +43,30 @@ defmodule ElixirTodoWeb.TodoLive do
   end
 
   @impl true
+  # NOTE: "id" comes from "phx-value-id" binding, and "value" is included because it exists
   def handle_event("save_edit", %{"id" => id, "value" => value}, socket) do
     item = Todos.get_item!(id)
     {:ok, _} = Todos.update_item(item, %{text: value})
     items = Todos.list_items_for_list(socket.assigns.selected_list)
     {:noreply, assign(socket, items: items, editing_item_id: nil)}
+  end
+
+  @doc """
+  Handles the creation of a new item when the user finishes typing in the new item input.
+  """
+  @impl true
+  def handle_event("create_item", %{"value" => text, "list_id" => list_id}, socket) do
+    text = String.trim(text || "")
+
+    if text != "" and list_id do
+      {:ok, _item} =
+        ElixirTodo.Todos.create_item(%{text: text, completed: false, list_id: list_id})
+
+      items = ElixirTodo.Todos.list_items_for_list(socket.assigns.selected_list)
+      {:noreply, assign(socket, items: items, new_item_text: "")}
+    else
+      {:noreply, socket}
+    end
   end
 
   # Add more handle_event functions for creating lists/items as needed
