@@ -32,8 +32,9 @@
                    name="text"
                    value={item.text}
                    phx-blur="save_edit"
-                   phx-key="enter"
                    phx-value-id={item.id}
+                   id={item.text <> "-" <> Integer.to_string(item.id)}
+                   phx-hook="BlurOnEnter"
                    autofocus
             />
           <% else %>
@@ -45,6 +46,16 @@
           <% end %>
         </li>
       <% end %>
+      <li>
+        <input type="text"
+               name="new_item"
+               id="new_item"
+               placeholder="Add new item..."
+               phx-blur="create_item"
+               phx-hook="BlurOnEnter"
+               phx-value-list_id={@selected_list && @selected_list.id}
+        />
+      </li>
     </ul>
   </main>
 </div>
