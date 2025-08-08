@@ -26,19 +26,26 @@
           type="text"
           name="name"
           placeholder="New list name"
-          class="min-w-0 flex-1 rounded-md border border-zinc-700 bg-zinc-800 px-3 py-2 text-sm text-zinc-100 placeholder-zinc-500 focus:border-zinc-500 focus:outline-none"
+          class="min-w-0 h-10 flex-1 rounded-md border border-zinc-700 bg-zinc-800 px-3 text-sm text-zinc-100 placeholder-zinc-500 focus:border-zinc-500 focus:outline-none"
         />
-        <input
-          type="color"
-          name="color"
-          value={@new_list_color}
-          class="h-8 w-8 min-w-[2rem] shrink-0 cursor-pointer rounded-md border border-zinc-700 bg-zinc-800 p-0 appearance-none overflow-hidden"
-          title="List color"
-        />
+        <div class="relative shrink-0 h-10">
+          <div class="flex h-full items-center gap-1.5 rounded-md border border-zinc-700 bg-zinc-800 px-2 text-sm text-zinc-200">
+            <span class="h-5 w-5 rounded-full border border-zinc-600" style={"background-color: #{@new_list_color};"}></span>
+            <.icon name="hero-chevron-down-mini" class="h-4 w-4 text-zinc-400" />
+          </div>
+          <input
+            type="color"
+            name="color"
+            value={@new_list_color}
+            phx-change="preview_list_color"
+            class="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+            aria-label="Pick list color"
+          />
+        </div>
         <button
           type="submit"
           phx-disable-with="Adding..."
-          class="shrink-0 rounded-md bg-zinc-700 px-2.5 py-2 text-sm font-medium text-zinc-100 hover:bg-zinc-600"
+          class="shrink-0 h-10 rounded-md bg-zinc-700 px-3 text-sm font-medium text-zinc-100 hover:bg-zinc-600 inline-flex items-center"
           aria-label="Add list"
         >
           Add
