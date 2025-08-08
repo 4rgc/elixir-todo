@@ -20,22 +20,29 @@
         </li>
       <% end %>
     </ul>
-    <div class="mt-4 space-y-2">
-      <form phx-submit="create_list" class="space-y-2">
-        <input type="text"
-               name="name"
-               placeholder="New list name"
-               class="w-full rounded border border-zinc-600 bg-zinc-800 text-zinc-100 px-2 py-1" />
-        <div class="flex items-center gap-2">
-          <input type="color"
-                 name="color"
-                 value={@new_list_color}
-                 class="h-8 w-10 rounded border border-zinc-600 bg-zinc-800" />
-          <button type="submit"
-            class="rounded bg-zinc-700 px-2 py-1 text-sm hover:bg-zinc-600">
-            Add List
-          </button>
-        </div>
+    <div class="mt-4">
+      <form phx-submit="create_list" class="flex items-center gap-2">
+        <input
+          type="text"
+          name="name"
+          placeholder="New list name"
+          class="flex-1 rounded-md border border-zinc-700 bg-zinc-800 px-3 py-2 text-sm text-zinc-100 placeholder-zinc-500 focus:border-zinc-500 focus:outline-none"
+        />
+        <input
+          type="color"
+          name="color"
+          value={@new_list_color}
+          class="h-9 w-9 cursor-pointer rounded-md border border-zinc-700 bg-zinc-800 p-0"
+          title="List color"
+        />
+        <button
+          type="submit"
+          phx-disable-with="Adding..."
+          class="rounded-md bg-zinc-700 px-3 py-2 text-sm font-medium text-zinc-100 hover:bg-zinc-600"
+          aria-label="Add list"
+        >
+          Add
+        </button>
       </form>
     </div>
   </aside>
