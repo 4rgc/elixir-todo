@@ -24,6 +24,7 @@ services:
       DATABASE_URL: ecto://postgres:postgres@db/todo_app_dev
       SECRET_KEY_BASE: ${SECRET_KEY_BASE}
       MIX_ENV: dev
+    command: sh -c "mix setup && mix phx.server"
     volumes:
       - .:/app
       - /app/_build
