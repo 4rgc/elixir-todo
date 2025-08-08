@@ -1,66 +1,113 @@
-<div class="flex gap-4">
-  <aside>
-    <h2 class="font-bold mb-2">Lists</h2>
-    <ul>
+<div class="flex gap-6">
+  <aside class="w-64 shrink-0">
+    <h2 class="mb-3 text-xs font-semibold uppercase tracking-wide text-zinc-400">Lists</h2>
+    <ul class="space-y-1">
       <%= for list <- @lists do %>
         <li>
           <button
             phx-click="select_list"
             phx-value-id={list.id}
-            style={"color: #{list.color}; font-weight: #{@selected_list && @selected_list.id == list.id && "bold"};"}
+            class={[
+              "group flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left text-sm text-zinc-200 hover:bg-zinc-800",
+              @selected_list && @selected_list.id == list.id && "bg-zinc-800 ring-1 ring-zinc-700"
+            ]}
           >
-            <%= list.name %>
+            <span class="inline-block h-2.5 w-2.5 rounded-full" style={"background-color: #{list.color};"}></span>
+            <span class="truncate">
+              <%= list.name %>
+            </span>
           </button>
         </li>
       <% end %>
     </ul>
+    <div class="mt-4">
+      <form phx-submit="create_list" class="flex items-center gap-2">
+        <input
+          type="text"
+          name="name"
+          placeholder="New list name"
+          class="min-w-0 h-10 flex-1 rounded-md border border-zinc-700 bg-zinc-800 px-3 text-sm text-zinc-100 placeholder-zinc-500 focus:border-zinc-500 focus:outline-none"
+        />
+        <div id="new-list-color-picker" class="relative shrink-0 h-10" phx-hook="ColorPreview">
+          <div class="flex h-full items-center gap-1.5 rounded-md border border-zinc-700 bg-zinc-800 px-2 text-sm text-zinc-200">
+            <span data-preview="list-color" class="h-5 w-5 rounded-full border border-zinc-600" style={"background-color: #{@new_list_color};"}></span>
+            <.icon name="hero-chevron-down-mini" class="h-4 w-4 text-zinc-400" />
+          </div>
+          <input
+            type="color"
+            name="color"
+            value={@new_list_color}
+            class="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+            aria-label="Pick list color"
+          />
+        </div>
+        <button
+          type="submit"
+          phx-disable-with="Adding..."
+          class="shrink-0 h-10 rounded-md bg-zinc-700 px-3 text-sm font-medium text-zinc-100 hover:bg-zinc-600 inline-flex items-center"
+          aria-label="Add list"
+        >
+          Add
+        </button>
+      </form>
+    </div>
   </aside>
   <main class="flex-1">
-    <h1 class="text-2xl mb-4" style={"color: #{@selected_list && @selected_list.color};"}>
-      <%= @selected_list && @selected_list.name %>
-    </h1>
-    <ul>
+    <div class="mb-4 flex items-center gap-3">
+      <span class="inline-block h-3 w-3 rounded-full" style={"background-color: #{@selected_list && @selected_list.color || "#71717a"};"}></span>
+      <h1 class="text-2xl font-semibold text-zinc-100">
+        <%= @selected_list && @selected_list.name || "No list selected" %>
+      </h1>
+    </div>
+    <ul class="divide-y divide-zinc-800 overflow-hidden rounded-md border border-zinc-800 bg-zinc-900/50">
       <%= for item <- @items do %>
-        <li>
-          <input type="checkbox"
-                 phx-click="toggle_item"
-                 phx-value-id={item.id}
-                 checked={item.completed} />
-
-          <%= if @editing_item_id == item.id do %>
-            <input type="text"
-                   name="text"
-                   value={item.text}
-                   phx-blur="save_edit"
+        <li class="group flex items-center justify-between px-3 py-2 hover:bg-zinc-800/60">
+          <div class="flex items-center">
+            <input type="checkbox"
+                   class="h-4 w-4 rounded border-zinc-600 text-zinc-400 focus:ring-0"
+                   phx-click="toggle_item"
                    phx-value-id={item.id}
-                   id={item.text <> "-" <> Integer.to_string(item.id)}
-                   phx-hook="BlurOnEnter"
-                   autofocus
-            />
-          <% else %>
-            <span style={item.completed && "text-decoration: line-through; cursor: pointer;"}
-                  phx-click="edit_item"
-                  phx-value-id={item.id}>
-              <%= item.text %>
-            </span>
-            <button
-              phx-click="delete_item"
-              phx-value-id={item.id}
-              class="ml-2 text-red-500 hover:text-red-300">
-              <.icon name="hero-trash-mini" class="h-4 w-4" />
-            </button>
-          <% end %>
+                   checked={item.completed} />
+
+            <%= if @editing_item_id == item.id do %>
+              <input type="text"
+                     name="text"
+                     value={item.text}
+                     phx-blur="save_edit"
+                     phx-value-id={item.id}
+                     id={item.text <> "-" <> Integer.to_string(item.id)}
+                     phx-hook="BlurOnEnter"
+                     autofocus
+                     class="ml-3 w-full bg-transparent text-zinc-100 placeholder-zinc-500 outline-none border-b border-zinc-700 focus:border-zinc-500" />
+            <% else %>
+              <span class={[
+                      "ml-3 cursor-pointer text-zinc-200",
+                      item.completed && "line-through text-zinc-500"
+                    ]}
+                    phx-click="edit_item"
+                    phx-value-id={item.id}>
+                <%= item.text %>
+              </span>
+            <% end %>
+          </div>
+          <button
+            phx-click="delete_item"
+            phx-value-id={item.id}
+            class="ml-2 text-red-400 opacity-0 transition-opacity hover:text-red-300 group-hover:opacity-100"
+            aria-label="Delete item">
+            <.icon name="hero-trash-mini" class="h-4 w-4" />
+          </button>
         </li>
       <% end %>
-      <li>
+      <li class="flex items-center px-3 py-2">
         <input type="text"
                name="new_item"
                id="new_item"
-               placeholder="Add new item..."
+               placeholder="Add a new item and hit Enter"
                phx-blur="create_item"
                phx-hook="BlurOnEnter"
                phx-value-list_id={@selected_list && @selected_list.id}
-        />
+               class="w-full rounded-md border border-zinc-700 bg-zinc-800 px-3 py-2 text-zinc-100 placeholder-zinc-500 focus:border-zinc-500 focus:outline-none" />
       </li>
     </ul>
   </main>

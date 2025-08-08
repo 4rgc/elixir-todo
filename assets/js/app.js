@@ -34,6 +34,26 @@ Hooks.BlurOnEnter = {
   },
 };
 
+Hooks.ColorPreview = {
+  mounted() {
+    const input = this.el.querySelector('input[type="color"]');
+    const dot = this.el.querySelector('[data-preview="list-color"]');
+    if (!input || !dot) return;
+    const update = (value) => {
+      dot.style.backgroundColor = value;
+    };
+    update(input.value);
+    this._onInput = (e) => update(e.target.value);
+    input.addEventListener("input", this._onInput);
+  },
+  destroyed() {
+    const input = this.el.querySelector('input[type="color"]');
+    if (input && this._onInput) {
+      input.removeEventListener("input", this._onInput);
+    }
+  },
+};
+
 window.LiveViewHooks = Hooks;
 
 let csrfToken = document
