@@ -51,6 +51,14 @@ defmodule ElixirTodoWeb.TodoLive do
     {:noreply, assign(socket, items: items, editing_item_id: nil)}
   end
 
+  @impl true
+  def handle_event("delete_item", %{"id" => id}, socket) do
+    item = Todos.get_item!(id)
+    {:ok, _} = Todos.delete_item(item)
+    items = Todos.list_items_for_list(socket.assigns.selected_list)
+    {:noreply, assign(socket, items: items)}
+  end
+
   @doc """
   Handles the creation of a new item when the user finishes typing in the new item input.
   """

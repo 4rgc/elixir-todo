@@ -77,7 +77,8 @@ defmodule ElixirTodo.TodosTest do
     end
 
     test "create_item/1 with valid data creates a item" do
-      valid_attrs = %{text: "some text", completed: true}
+      list = list_fixture()
+      valid_attrs = %{text: "some text", completed: true, list_id: list.id}
 
       assert {:ok, %Item{} = item} = Todos.create_item(valid_attrs)
       assert item.text == "some text"

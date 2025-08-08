@@ -43,6 +43,12 @@
                   phx-value-id={item.id}>
               <%= item.text %>
             </span>
+            <button
+              phx-click="delete_item"
+              phx-value-id={item.id}
+              class="text-red-500 ml-2">
+              <img src={~p"/images/delete.svg"} alt="Delete" />
+            </button>
           <% end %>
         </li>
       <% end %>
