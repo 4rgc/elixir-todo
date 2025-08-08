@@ -28,16 +28,15 @@
           placeholder="New list name"
           class="min-w-0 h-10 flex-1 rounded-md border border-zinc-700 bg-zinc-800 px-3 text-sm text-zinc-100 placeholder-zinc-500 focus:border-zinc-500 focus:outline-none"
         />
-        <div class="relative shrink-0 h-10">
+        <div id="new-list-color-picker" class="relative shrink-0 h-10" phx-hook="ColorPreview">
           <div class="flex h-full items-center gap-1.5 rounded-md border border-zinc-700 bg-zinc-800 px-2 text-sm text-zinc-200">
-            <span class="h-5 w-5 rounded-full border border-zinc-600" style={"background-color: #{@new_list_color};"}></span>
+            <span data-preview="list-color" class="h-5 w-5 rounded-full border border-zinc-600" style={"background-color: #{@new_list_color};"}></span>
             <.icon name="hero-chevron-down-mini" class="h-4 w-4 text-zinc-400" />
           </div>
           <input
             type="color"
             name="color"
             value={@new_list_color}
-            phx-change="preview_list_color"
             class="absolute inset-0 h-full w-full cursor-pointer opacity-0"
             aria-label="Pick list color"
           />
