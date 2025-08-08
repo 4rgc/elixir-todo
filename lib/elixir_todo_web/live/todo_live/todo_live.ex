@@ -18,7 +18,9 @@ defmodule ElixirTodoWeb.TodoLive do
      |> assign(:lists, lists)
      |> assign(:selected_list, selected_list)
      |> assign(:items, items)
-     |> assign(:editing_item_id, nil)}
+     |> assign(:editing_item_id, nil)
+     |> assign(:new_list_name, "")
+     |> assign(:new_list_color, "#22c55e")}
   end
 
   @impl true
@@ -57,6 +59,28 @@ defmodule ElixirTodoWeb.TodoLive do
     {:ok, _} = Todos.delete_item(item)
     items = Todos.list_items_for_list(socket.assigns.selected_list)
     {:noreply, assign(socket, items: items)}
+  end
+
+  @impl true
+  def handle_event("create_list", %{"name" => name, "color" => color}, socket) do
+    name = String.trim(name || "")
+    color = String.trim(color || "")
+
+    if name != "" and color != "" do
+      {:ok, list} = Todos.create_list(%{name: name, color: color})
+      lists = Todos.list_lists()
+      items = Todos.list_items_for_list(list)
+
+      {:noreply,
+       socket
+       |> assign(:lists, lists)
+       |> assign(:selected_list, list)
+       |> assign(:items, items)
+       |> assign(:new_list_name, "")
+       |> assign(:new_list_color, color)}
+    else
+      {:noreply, socket}
+    end
   end
 
   @doc """
