@@ -46,8 +46,8 @@
             <button
               phx-click="delete_item"
               phx-value-id={item.id}
-              class="text-red-500 ml-2">
-              <img src={~p"/images/delete.svg"} alt="Delete" class="inline h-4 w-4 align-middle" width="16" height="16" />
+              class="ml-2 text-red-500 hover:text-red-300">
+              <.icon name="hero-trash-mini" class="h-4 w-4" />
             </button>
           <% end %>
         </li>
