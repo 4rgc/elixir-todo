@@ -22,6 +22,7 @@ defmodule ElixirTodoWeb.Router do
     live "/lists/new", ListLive.Index, :new
     live "/lists/:id/edit", ListLive.Index, :edit
     live "/lists/:id", ListLive.Show, :show
+    live "/lists/:id/show/edit", ListLive.Show, :edit
 
     live "/items", ItemLive.Index, :index
     live "/items/new", ItemLive.Index, :new

@@ -23,14 +23,20 @@ defmodule ElixirTodo.TodosFixtures do
   Generate a item.
   """
   def item_fixture(attrs \\ %{}) do
-    {:ok, item} =
-      attrs
-      |> Enum.into(%{
-        completed: true,
-        text: "some text"
-      })
-      |> ElixirTodo.Todos.create_item()
+    list = Map.get(attrs, :list) || list_fixture()
 
+    base_attrs = %{
+      completed: true,
+      text: "some text",
+      list_id: list.id
+    }
+
+    final_attrs =
+      attrs
+      |> Map.delete(:list)
+      |> Enum.into(base_attrs)
+
+    {:ok, item} = ElixirTodo.Todos.create_item(final_attrs)
     item
   end
 end
